@@ -145,5 +145,3 @@ For support, please open an issue in the GitHub repository.
 
 ---
 Made with ❤️ by [Saleh]
-
-Let me know if you'd like any modifications or additional sections in the README!
