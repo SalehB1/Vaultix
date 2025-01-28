@@ -1,0 +1,79 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:16.3
+    platform: linux/amd64
+    container_name: iam-db
+    env_file:
+      - inf/Docker/postgres/.environment
+    ports:
+      - "40532:5432"
+    volumes:
+      - auth_postgis_data:/var/lib/postgresql
+      - auth_dbbackups:/backups
+      - auth_postgres_data:/var/lib/postgresql/data/
+
+  cache:
+    build:
+      context: ./inf/Docker/redis
+      dockerfile: Dockerfile
+    container_name: iam-cache
+    environment:
+      - inf/Docker/redis/.environment
+    ports:
+      - "61709:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - redis_net
+    restart: unless-stopped
+
+  backend:
+    container_name: iam-backend
+    build:
+      context: .
+      dockerfile: inf/Docker/backend/Dockerfile
+    depends_on:
+      - db
+      - cache
+    env_file:
+      - .env
+    volumes:
+      - ./:/app/
+    networks:
+      - redis_net
+
+  nginx:
+    container_name: iam-nginx
+    image: nginx:1.25.1-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - static_volume:/statics
+      - media_volume:/media
+      - ./inf/Docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./inf/Docker/nginx/cert:/cert
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/lib/letsencrypt:/var/lib/letsencrypt
+    depends_on:
+      - backend
+    restart: always
+
+networks:
+  redis_net:
+    driver: bridge
+
+volumes:
+  auth_postgis_data:
+  auth_dbbackups:
+  auth_postgres_data:
+  redis_data:
+  static_volume:
+  media_volume:

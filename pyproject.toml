@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "auth-app"
+version = "0.1.0"
+description = ""
+authors = ["who <91316548+SalehB1@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+sqlalchemy = "^2.0.36"
+typing-inspect = "^0.9.0"
+python-dotenv = "^1.0.1"
+sentry-sdk = "^2.19.0"
+httpx = "^0.27.2"
+fastapi = "^0.115.5"
+pydantic = {extras = ["email"], version = "^2.10.1"}
+bcrypt = "^4.2.1"
+fastapi-mail = "^1.4.2"
+aiohttp = "^3.11.8"
+redis = "^5.2.0"
+gunicorn = "^23.0.0"
+alembic = "^1.14.0"
+pytz = "^2024.2"
+asyncpg = "^0.30.0"
+greenlet = "^3.1.1"
+pyjwt = "^2.10.1"
+pydantic-settings = "^2.6.1"
+jinja2 = "^3.1.4"
+uvicorn = "^0.32.1"
+requests = "^2.32.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

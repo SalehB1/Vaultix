@@ -1,0 +1,11 @@
+venv
+.git
+.gitignore
+/database/versions/
+/server_time_log.log
+/README.md
+/database/fum.db
+__pycache__
+.DS
+.idea
+.env-local
